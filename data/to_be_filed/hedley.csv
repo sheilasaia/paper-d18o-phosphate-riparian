@@ -1,0 +1,193 @@
+depth,extract,conc,fraction,site
+10,H2O,1.3,Pi,1
+30,H2O,1.0,Pi,1
+50,H2O,1.3,Pi,1
+100,H2O,2.7,Pi,1
+10,H2O,14.6,Po ,1
+30,H2O,29.4,Po ,1
+50,H2O,21.7,Po ,1
+100,H2O,40.8,Po ,1
+10,NaHCO3,21.0,Pi,1
+30,NaHCO3,14.0,Pi,1
+50,NaHCO3,14.3,Pi,1
+100,NaHCO3,33.2,Pi,1
+10,NaHCO3,87.6,Po ,1
+30,NaHCO3,57.5,Po ,1
+50,NaHCO3,57.9,Po ,1
+100,NaHCO3,103.6,Po ,1
+10,NaOH,114.4,Pi,1
+30,NaOH,68.7,Pi,1
+50,NaOH,83.0,Pi,1
+100,NaOH,243.8,Pi,1
+10,NaOH,261.4,Po ,1
+30,NaOH,170.5,Po ,1
+50,NaOH,161.8,Po ,1
+100,NaOH,NA,Po ,1
+10,HCl,136.4,Pi,1
+30,HCl,89.7,Pi,1
+50,HCl,91.7,Pi,1
+100,HCl,51.0,Pi,1
+10,HCl,162.4,Po ,1
+30,HCl,103.9,Po ,1
+50,HCl,107.3,Po ,1
+100,HCl,68.0,Po ,1
+10,H2O,1.0,Pi,2
+30,H2O,1.7,Pi,2
+50,H2O,1.7,Pi,2
+100,H2O,1.7,Pi,2
+10,H2O,3.8,Po ,2
+30,H2O,10.6,Po ,2
+50,H2O,9.3,Po ,2
+100,H2O,50.5,Po ,2
+10,NaHCO3,7.2,Pi,2
+30,NaHCO3,21.3,Pi,2
+50,NaHCO3,16.4,Pi,2
+100,NaHCO3,16.4,Pi,2
+10,NaHCO3,40.0,Po ,2
+30,NaHCO3,86.5,Po ,2
+50,NaHCO3,62.1,Po ,2
+100,NaHCO3,73.0,Po ,2
+10,NaOH,41.2,Pi,2
+30,NaOH,116.0,Pi,2
+50,NaOH,84.1,Pi,2
+100,NaOH,84.1,Pi,2
+10,NaOH,154.6,Po ,2
+30,NaOH,194.3,Po ,2
+50,NaOH,146.3,Po ,2
+100,NaOH,148.1,Po ,2
+10,HCl,43.7,Pi,2
+30,HCl,136.4,Pi,2
+50,HCl,118.6,Pi,2
+100,HCl,118.6,Pi,2
+10,HCl,64.6,Po ,2
+30,HCl,173.0,Po ,2
+50,HCl,136.0,Po ,2
+100,HCl,60.4,Po ,2
+10,H2O,0.8,Pi,3
+30,H2O,0.9,Pi,3
+50,H2O,1.4,Pi,3
+100,H2O,2.1,Pi,3
+10,H2O,7.5,Po ,3
+30,H2O,5.3,Po ,3
+50,H2O,4.3,Po ,3
+100,H2O,19.7,Po ,3
+10,NaHCO3,14.1,Pi,3
+30,NaHCO3,10.8,Pi,3
+50,NaHCO3,7.5,Pi,3
+100,NaHCO3,6.9,Pi,3
+10,NaHCO3,82.9,Po ,3
+30,NaHCO3,47.5,Po ,3
+50,NaHCO3,30.9,Po ,3
+100,NaHCO3,26.0,Po ,3
+10,NaOH,98.2,Pi,3
+30,NaOH,48.3,Pi,3
+50,NaOH,39.8,Pi,3
+100,NaOH,25.6,Pi,3
+10,NaOH,311.5,Po ,3
+30,NaOH,137.9,Po ,3
+50,NaOH,91.5,Po ,3
+100,NaOH,84.5,Po ,3
+10,HCl,151.2,Pi,3
+30,HCl,119.8,Pi,3
+50,HCl,78.1,Pi,3
+100,HCl,80.7,Pi,3
+10,HCl,166.6,Po ,3
+30,HCl,138.7,Po ,3
+50,HCl,116.4,Po ,3
+100,HCl,95.1,Po ,3
+10,H2O,0.8,Pi,4
+30,H2O,0.7,Pi,4
+50,H2O,1.0,Pi,4
+100,H2O,0.8,Pi,4
+10,H2O,5.2,Po ,4
+30,H2O,3.4,Po ,4
+50,H2O,3.7,Po ,4
+100,H2O,7.5,Po ,4
+10,NaHCO3,16.3,Pi,4
+30,NaHCO3,7.3,Pi,4
+50,NaHCO3,8.1,Pi,4
+100,NaHCO3,5.5,Pi,4
+10,NaHCO3,77.9,Po ,4
+30,NaHCO3,30.4,Po ,4
+50,NaHCO3,35.1,Po ,4
+100,NaHCO3,16.6,Po ,4
+10,NaOH,76.6,Pi,4
+30,NaOH,35.8,Pi,4
+50,NaOH,30.0,Pi,4
+100,NaOH,38.3,Pi,4
+10,NaOH,321.5,Po ,4
+30,NaOH,106.2,Po ,4
+50,NaOH,128.3,Po ,4
+100,NaOH,NA,Po ,4
+10,HCl,112.6,Pi,4
+30,HCl,84.0,Pi,4
+50,HCl,78.7,Pi,4
+100,HCl,59.0,Pi,4
+10,HCl,168.7,Po ,4
+30,HCl,104.8,Po ,4
+50,HCl,99.1,Po ,4
+100,HCl,72.9,Po ,4
+10,H2O,0.8,Pi,5
+30,H2O,0.8,Pi,5
+50,H2O,1.6,Pi,5
+100,H2O,1.3,Pi,5
+10,H2O,7.3,Po ,5
+30,H2O,3.2,Po ,5
+50,H2O,3.0,Po ,5
+100,H2O,4.8,Po ,5
+10,NaHCO3,14.0,Pi,5
+30,NaHCO3,8.1,Pi,5
+50,NaHCO3,8.0,Pi,5
+100,NaHCO3,11.6,Pi,5
+10,NaHCO3,71.1,Po ,5
+30,NaHCO3,36.4,Po ,5
+50,NaHCO3,37.3,Po ,5
+100,NaHCO3,5.8,Po ,5
+10,NaOH,75.9,Pi,5
+30,NaOH,37.2,Pi,5
+50,NaOH,55.1,Pi,5
+100,NaOH,9.8,Pi,5
+10,NaOH,277.7,Po ,5
+30,NaOH,140.2,Po ,5
+50,NaOH,113.6,Po ,5
+100,NaOH,17.2,Po ,5
+10,HCl,108.5,Pi,5
+30,HCl,82.3,Pi,5
+50,HCl,72.4,Pi,5
+100,HCl,65.2,Pi,5
+10,HCl,140.0,Po ,5
+30,HCl,107.7,Po ,5
+50,HCl,87.9,Po ,5
+100,HCl,81.8,Po ,5
+10,H2O,0.5,Pi,6
+30,H2O,0.4,Pi,6
+50,H2O,0.4,Pi,6
+100,H2O,2.0,Pi,6
+10,H2O,5.6,Po ,6
+30,H2O,3.2,Po ,6
+50,H2O,2.6,Po ,6
+100,H2O,4.0,Po ,6
+10,NaHCO3,10.0,Pi,6
+30,NaHCO3,5.8,Pi,6
+50,NaHCO3,4.8,Pi,6
+100,NaHCO3,4.2,Pi,6
+10,NaHCO3,57.6,Po ,6
+30,NaHCO3,28.0,Po ,6
+50,NaHCO3,21.8,Po ,6
+100,NaHCO3,9.8,Po ,6
+10,NaOH,65.6,Pi,6
+30,NaOH,29.5,Pi,6
+50,NaOH,24.1,Pi,6
+100,NaOH,15.6,Pi,6
+10,NaOH,228.2,Po ,6
+30,NaOH,101.1,Po ,6
+50,NaOH,74.3,Po ,6
+100,NaOH,23.7,Po ,6
+10,HCl,93.1,Pi,6
+30,HCl,73.4,Pi,6
+50,HCl,64.8,Pi,6
+100,HCl,29.5,Pi,6
+10,HCl,118.9,Po ,6
+30,HCl,89.2,Po ,6
+50,HCl,79.8,Po ,6
+100,HCl,39.9,Po ,6
