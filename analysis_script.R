@@ -1,6 +1,5 @@
-
 # ---- script header ----
-# script name: analysis_script_new.R
+# script name: analysis_script.R
 # purpose of script: statistical analysis and plotting code used in paper analysis
 # author: sheila saia
 # date created: 2021-03-11
@@ -14,25 +13,23 @@
 # plotting lme results: https://lmudge13.github.io/sample_code/mixed_effects.html
 # help on effects: https://stats.stackexchange.com/questions/233007/interpreting-effects-plots-in-r/233018
 
+
 # ---- to do ----
 # to do list
 
-# TODO look here to do prediction for d18O vs distance http://www.r-tutor.com/elementary-statistics/simple-linear-regression/confidence-interval-linear-regression
-
 
 # ---- 1. load libraries ----
+# library(devtools)
+# devtools::install_github("strengejacke/sjPlot")
+
 library(tidyverse)
+library(forcats)
 library(here)
 library(car) # for qqPlot
-library(forcats)
-# library(nlme)
 library(lme4)
 library(sjPlot)
 library(effects)
-# library(tidylog)
-
-# library(devtools)
-# devtools::install_github("strengejacke/sjPlot")
+library(renv)
 
 
 # ---- 2. load data ----
@@ -47,7 +44,7 @@ hedley_data <- read_csv(here::here("data", "hedley_data.csv"), col_names = TRUE)
 # organic p (Po) has only one rep
 
 
-# ---- 3. d18O-phos modeling ----
+# ---- 3. d18o-phos modeling and figure 3 ----
 # check normality in response
 hist(d18o_data$d18o_value) # hard to tell --> look at qqplot
 qqPlot(d18o_data$d18o_value) # data is along qqline and within bounds --> normally distributed
@@ -56,15 +53,17 @@ qqPlot(d18o_data$d18o_value) # data is along qqline and within bounds --> normal
 # include id as random effect
 # don't have enough samples for random slope models (i.e., 1 + transect_dist_m | bonn_id)
 # use random intercept models only (i.e., 1 | bonn_id)
-d18o_lme1 <- lmer(d18o_value ~ depth_cm + (1 | bonn_id), data = d18o_data, REML = FALSE)
-summary(d18o_lme1)
-sjPlot::tab_model(d18o_lme1)
-
 d18o_lme0 <- lmer(d18o_value ~ transect_dist_m + (1 | bonn_id), data = d18o_data, REML = FALSE)
 summary(d18o_lme0)
 sjPlot::tab_model(d18o_lme0)
 
-# model with depth
+# model with only depth (no distance)
+# include id as random effect
+d18o_lme1 <- lmer(d18o_value ~ depth_cm + (1 | bonn_id), data = d18o_data, REML = FALSE)
+summary(d18o_lme1)
+sjPlot::tab_model(d18o_lme1)
+
+# model with depth and distance
 # include id as random effect
 d18o_lme2 <- lmer(d18o_value ~ transect_dist_m + depth_cm + (1 | bonn_id), data = d18o_data, REML = FALSE)
 summary(d18o_lme2)
@@ -76,9 +75,9 @@ d18o_lme3 <- lmer(d18o_value ~ transect_dist_m * depth_cm + (1 | bonn_id), data 
 summary(d18o_lme3)
 sjPlot::tab_model(d18o_lme3)
 
-# AIC
+# AIC to compare models
 AIC(d18o_lme1, d18o_lme0, d18o_lme2, d18o_lme3)
-# model 2 and 3 are best but not different so take the simplest one -> lme2
+# model 2 and 3 are best but not different so go with the simplest one -> lme2
 
 # anova to look at p value of having depth and distance
 # anova(d18o_lme1, d18o_lme2)
@@ -107,7 +106,7 @@ lme2_fixed_effects_df <- as.data.frame(lme2_fixed_effects)
 
 # plot
 # plot data and model (figure 3)
-pdf(here::here("figures_tables", "figure_3.pdf"), width = 12, height = 10)
+# pdf(here::here("figures_tables", "figure_3.pdf"), width = 12, height = 10)
 ggplot() +
   # observations
   geom_point(data = d18o_data,
@@ -133,31 +132,32 @@ ggplot() +
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.background = element_blank())
-dev.off()
+# dev.off()
+# getting error if use pdf() function so export manually
 
 
 # ---- 4. separate Pi and Po data ----
 # transect distance key
 transect_dist_key <- data.frame(transect_dist_id = seq(1, 6, 1),
                                 transect_dist_m = unique(d18o_data$transect_dist_m))
+
 # filter Pi data
 inorg_hedley_data <- hedley_data %>%
   filter(fraction == "Pi") %>%
   left_join(transect_dist_key, by = "transect_dist_id") %>%
   filter(soil_moist_type == "dried")
-# note: pi values are means, individual measurements were lost
+# note: there are triplicate measuremens for pi
 
 # filter Po data
 org_hedley_data <- hedley_data %>%
   filter(fraction == "Po")  %>%
   left_join(transect_dist_key, by = "transect_dist_id")  %>%
   filter(soil_moist_type == "dried")
+# note: po values calcuated as total p minus mean of pi for that extraction and depth
+# total p was only measured once per sample and raw data were lost due to laboratory closure
 
-# note: po = tp - mean(pi)
-# tp was only measured once per sample
 
-
-# ---- 5. hedly data plots ----
+# ---- 5. hedley data plots (figures 1 and 2) ----
 # colors for plots
 #my_colors <- c("white", "grey60", "grey40", "grey30")
 
@@ -174,21 +174,6 @@ ggplot(data = inorg_hedley_data,
   #scale_fill_manual(values = my_colors) +
   theme_classic()
 dev.off()
-# some pools have trends but some don't
-
-# inorganic P fractions (linear model)
-# pdf(here::here("figures_tables", "pi_vs_distance_by_extract.pdf"), width = 10, height = 10, pointsize = 14)
-# ggplot(data = inorg_hedley_data,
-#        mapping = aes(x = transect_dist_m, y = p_conc_mgperkg, color = extract)) +
-#   geom_point(alpha = 0.5, size = 2) +
-#   xlim(0, 60) +
-#   facet_wrap(~ extract, scales = "free") +
-#   labs(x = "Transect Distance (m)", 
-#        y = "Inorganic P Concentration (mg per kg)",
-#        color = "Extraction") +
-#   #scale_fill_manual(values = my_colors) +
-#   theme_classic()
-# dev.off()
 
 # organic P fractions (figure 2)
 pdf(here::here("figures_tables", "figure_2.pdf"), width = 10, height = 10, pointsize = 14)
@@ -203,7 +188,6 @@ ggplot(data = org_hedley_data,
   #scale_fill_manual(values = my_colors) +
   theme_classic()
 dev.off()
-# potential linear negative trend here?
 
 
 # ---- 5. Pi modeling ----
@@ -231,7 +215,7 @@ summary(h2o_pi_lm2)
 h2o_pi_lm3 <- lm(log(p_conc_mgperkg) ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = h2o_pi_data)
 summary(h2o_pi_lm3)
 
-# AIC
+# AIC comparison
 AIC(h2o_pi_lm1, h2o_pi_lm2, h2o_pi_lm3)
 # models 2 and 3 are units so take lm2
 
@@ -271,7 +255,7 @@ summary(nahco3_pi_lm2)
 nahco3_pi_lm3 <- lm(log(p_conc_mgperkg) ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = nahco3_pi_data)
 summary(nahco3_pi_lm3)
 
-# AIC
+# AIC comparison
 AIC(nahco3_pi_lm1, nahco3_pi_lm2, nahco3_pi_lm3)
 # model 3 is lowest
 
@@ -287,7 +271,7 @@ plot(nahco3_pi_lm3$residuals ~ nahco3_pi_data$transect_dist_m)
 # no linear or funnel pattern in the residuals vs distance --> homoscedastic (i.e., constant variance)
 
 
-# naoh
+# naoh extraction
 # select data
 naoh_pi_data <- inorg_hedley_data %>%
   filter(extract == "NaOH")
@@ -311,7 +295,7 @@ summary(naoh_pi_lm2)
 naoh_pi_lm3 <- lm(log(p_conc_mgperkg) ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = naoh_pi_data)
 summary(naoh_pi_lm3)
 
-# AIC
+# AIC comparison
 AIC(naoh_pi_lm1, naoh_pi_lm2, naoh_pi_lm3)
 # lm3 is lowest
 
@@ -327,7 +311,7 @@ plot(naoh_pi_lm3$residuals ~ naoh_pi_data$transect_dist_m)
 # no linear or funnel pattern in the residuals vs distance --> homoscedastic (i.e., constant variance)
 
 
-# hcl
+# hcl extraction
 # select data
 hcl_pi_data <- inorg_hedley_data %>%
   filter(extract == "HCl")
@@ -351,7 +335,7 @@ summary(hcl_pi_lm2)
 hcl_pi_lm3 <- lm(log(p_conc_mgperkg) ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = hcl_pi_data)
 summary(hcl_pi_lm3)
 
-# AIC
+# AIC comparison
 AIC(hcl_pi_lm1, hcl_pi_lm2, hcl_pi_lm3)
 # lm3 is lowest
 
@@ -392,7 +376,7 @@ summary(h2o_po_lm2)
 h2o_po_lm3 <- lm(log(p_conc_mgperkg) ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = h2o_po_data)
 summary(h2o_po_lm3)
 
-# AIC
+# AIC comparison
 AIC(h2o_po_lm1, h2o_po_lm2, h2o_po_lm3)
 # lm3 has the lowest value
 
@@ -432,7 +416,7 @@ summary(nahco3_po_lm2)
 nahco3_po_lm3 <- lm(p_conc_mgperkg ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = nahco3_po_data)
 summary(nahco3_po_lm3)
 
-# AIC
+# AIC comparison
 AIC(nahco3_po_lm1, nahco3_po_lm2, nahco3_po_lm3)
 # lm2 and lm3 are not sign. different so go with lm2
 
@@ -448,7 +432,7 @@ plot(nahco3_po_lm2$residuals ~ nahco3_po_data$transect_dist_m)
 # no linear or funnel pattern in the residuals vs distance --> homoscedastic (i.e., constant variance)
 
 
-# naoh
+# naoh extraction
 # select data
 naoh_po_data <- org_hedley_data %>%
   filter(extract == "NaOH")
@@ -472,7 +456,7 @@ summary(naoh_po_lm2)
 naoh_po_lm3 <- lm(p_conc_mgperkg ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = naoh_po_data)
 summary(naoh_po_lm3)
 
-# AIC
+# AIC comparison
 AIC(naoh_po_lm1, naoh_po_lm2, naoh_po_lm3)
 # lm3 is lowest
 
@@ -488,7 +472,7 @@ plot(naoh_po_lm3$residuals ~ naoh_po_data$transect_dist_m)
 # no linear or funnel pattern in the residuals vs distance --> homoscedastic (i.e., constant variance)
 
 
-# hcl
+# hcl extraction
 # select data
 hcl_po_data <- org_hedley_data %>%
   filter(extract == "HCl")
@@ -511,7 +495,7 @@ summary(hcl_po_lm2)
 hcl_po_lm3 <- lm(p_conc_mgperkg ~ transect_dist_m + depth_cm + transect_dist_m:depth_cm, data = hcl_po_data)
 summary(hcl_po_lm3)
 
-# AIC
+# AIC comparison
 AIC(hcl_po_lm1, hcl_po_lm2, hcl_po_lm3)
 # lm2 is lowest
 
@@ -527,7 +511,7 @@ plot(hcl_po_lm2$residuals ~ hcl_po_data$transect_dist_m)
 # no linear or funnel pattern in the residuals vs distance --> homoscedastic (i.e., constant variance)
 
 
-# ---- 7. extra ----
+# ---- 7. redox modeling and figure s3 ----
 # add redox labeling and drop furthest distance
 d18o_data_redox <- d18o_data %>%
   filter(transect_dist_id <= 4) %>%
@@ -536,15 +520,12 @@ d18o_data_redox <- d18o_data %>%
                                   depth_cm == 50 ~ "other",
                                   depth_cm == 100 ~ "reduced")) %>%
   filter(redox_status != "other")
-# d18o_data_redox <- d18o_data %>%
-#   filter(transect_dist_id <= 5) %>%
-  # mutate(redox_status = if_else(depth_cm == 10, "oxidized", "reduced"))
 
 # check normality in response
 hist(d18o_data_redox$d18o_value) # hard to tell --> look at qqplot
 qqPlot(d18o_data_redox$d18o_value) # data is along qqline and within bounds --> normally distributed
 
-# model without depth
+# model without distance
 # include id as random effect
 # don't have enough samples for random slope models (i.e., 1 + transect_dist_m | bonn_id)
 # use random intercept models only (i.e., 1 | bonn_id)
@@ -552,19 +533,19 @@ d18o_lme4 <- lmer(d18o_value ~ redox_status + (1 | bonn_id), data = d18o_data_re
 summary(d18o_lme4)
 sjPlot::tab_model(d18o_lme4)
 
-# model with depth
+# model with distance and redox status
 # include id as random effect
 d18o_lme5 <- lmer(d18o_value ~ transect_dist_m + redox_status + (1 | bonn_id), data = d18o_data_redox, REML=FALSE)
 summary(d18o_lme5)
 sjPlot::tab_model(d18o_lme5)
 
-# model with depth and distance interaction
+# model with distance and redox status as well as interaction
 # include id as random effect
 d18o_lme6 <- lmer(d18o_value ~ transect_dist_m * redox_status + (1 | bonn_id), data = d18o_data_redox, REML=FALSE)
 summary(d18o_lme6)
 sjPlot::tab_model(d18o_lme6)
 
-# AIC
+# AIC comparison
 AIC(d18o_lme4, d18o_lme5, d18o_lme6)
 # model 5 and 6 are best but not different so take the simplest one -> lme5
 
@@ -628,172 +609,5 @@ ggplot() +
         panel.grid.minor = element_blank(),
         panel.background = element_blank())
 # dev.off()
+# getting error if use pdf() function so export manually
 
-
-
-
-
-
-
-
-
-
-
-
-
-# model without depth
-d18o_lm4 <- lm(d18o_value ~ transect_dist_m, data = d18o_data_redox)
-summary(d18o_lm4)
-
-# model with depth
-d18o_lm5 <- lm(d18o_value ~ transect_dist_m + redox_status, data = d18o_data_redox)
-summary(d18o_lm5)
-
-# model with depth and interaction
-d18o_lm6 <- lm(d18o_value ~ transect_dist_m + redox_status + transect_dist_m:redox_status, data = d18o_data_redox)
-summary(d18o_lm6)
-
-# AIC
-AIC(d18o_lm4, d18o_lm5, d18o_lm6)
-# model 5 and 6 are best but not different so take the simplest one -> lm5
-
-# look at residuals of first model
-# hist of residuals
-hist(d18o_lm5$residuals) # looks normally distributed
-qqPlot(d18o_lm5$residuals) # looks normally distributed
-# check for constant variance
-plot(d18o_lm5$residuals ~ d18o_lm5$fitted.values)
-# random pattern in the residuals vs fitted values --> homoscedastic (i.e., constant variance)
-plot(d18o_lm5$residuals ~ d18o_data_redox$transect_dist_m)
-# random pattern in the residuals vs distance --> homoscedastic (i.e., constant variance)
-
-# make new data for predictions
-d18o_new_data_reduced <- data.frame(transect_dist_m = unique(d18o_data_redox$transect_dist_m),
-                            redox_status = rep(c("reduced"), length(unique(d18o_data_redox$transect_dist_m))))
-d18o_new_data_oxidized <- data.frame(transect_dist_m = unique(d18o_data_redox$transect_dist_m),
-                                    redox_status = rep(c("oxidized"), length(unique(d18o_data_redox$transect_dist_m))))
-
-# predict
-d18o_lm5_predict_reduced <- predict(d18o_lm5, newdata = d18o_new_data_reduced, se.fit = TRUE)
-d18o_lm5_predict_oxidized <- predict(d18o_lm5, newdata = d18o_new_data_oxidized, se.fit = TRUE)
-
-# t critical calculation
-alpha = 0.05
-d18o_lm5_n = length(d18o_data_redox$transect_dist_m)
-d18o_lm5_p=length(coef(d18o_lm5))
-tcrit95_d18o_lm5 = qt(1-(alpha/2),d18o_lm5_n - d18o_lm5_p)
-
-# make a dataframe with model and CI's
-d18o_lm_data_reduced <- data.frame(transect_dist_m = d18o_new_data_reduced$transect_dist_m,
-                                   redox_status = d18o_new_data_reduced$redox_status,
-                                   prediction = d18o_lm5_predict_reduced$fit,
-                                   lower_ci = d18o_lm5_predict_reduced$fit - tcrit95_d18o_lm5 * d18o_lm5_predict_reduced$se.fit,
-                                   upper_ci = d18o_lm5_predict_reduced$fit + tcrit95_d18o_lm5 * d18o_lm5_predict_reduced$se.fit) %>%
-  arrange(transect_dist_m)
-d18o_lm_data_oxidized <- data.frame(transect_dist_m = d18o_new_data_oxidized$transect_dist_m,
-                                    redox_status = d18o_new_data_oxidized$redox_status,
-                                    prediction = d18o_lm5_predict_oxidized$fit,
-                                    lower_ci = d18o_lm5_predict_oxidized$fit - tcrit95_d18o_lm5 * d18o_lm5_predict_oxidized$se.fit,
-                                    upper_ci = d18o_lm5_predict_oxidized$fit + tcrit95_d18o_lm5 * d18o_lm5_predict_oxidized$se.fit) %>%
-  arrange(transect_dist_m)
-
-
-# plot data and model
-# pdf(here::here("figures_tables", "d18o_vs_distance_lm5.pdf"), width = 10, height = 10, pointsize = 14)
-# plot(d18o_data_redox$d18o_value ~ d18o_data_redox$transect_dist_m,
-#      pch = 16, xlim = c(0, 56), ylim = c(0, 30), 
-#      xlab = "Transect Distance (m)", 
-#      ylab = expression(paste(delta^{18}*O[P], " (\u2030)")))
-# rect(0, 14, 56, 18, col = rgb(0.5, 0.5, 0.5, 0.25), lwd = 0, boarder = "white")
-# lines(d18o_lm_data_reduced$transect_dist_m, d18o_lm_data_reduced$prediction, lwd = 2, lty = 1, col = "black")
-# lines(d18o_lm_data_reduced$transect_dist_m, d18o_lm_data_reduced$lower_ci, lwd = 0.5, col = "black")
-# lines(d18o_lm_data_reduced$transect_dist_m, d18o_lm_data_reduced$upper_ci, lwd = 0.5, col = "black")
-# lines(d18o_lm_data_oxidized$transect_dist_m, d18o_lm_data_oxidized$prediction, lwd = 2, lty = 2, col = "black")
-# lines(d18o_lm_data_oxidized$transect_dist_m, d18o_lm_data_oxidized$lower_ci, lwd = 0.5, col = "black")
-# lines(d18o_lm_data_oxidized$transect_dist_m, d18o_lm_data_oxidized$upper_ci, lwd = 0.5, col = "black")
-# legend("topright", c("Observation", "Reduced", "Oxidized", "95% CI"), 
-#        pch = c(16, NA, NA, NA), lwd = c(NA, 2, 2, 0.5), lty = c(NA, 1, 2, 1))
-# dev.off()
-
-
-
-# add redox labeling and drop furthest distance
-hedley_data_redox <- hedley_data %>%
-  filter(transect_dist_id <= 4) %>%
-  mutate(redox_status = case_when(depth_cm == 10 ~ "oxidized",
-                                  depth_cm == 30 ~ "other",
-                                  depth_cm == 50 ~ "other",
-                                  depth_cm == 100 ~ "reduced")) %>%
-  filter(redox_status != "other")
-
-# transect distance key
-transect_dist_key <- data.frame(transect_dist_id = seq(1, 4, 1),
-                                transect_dist_m = unique(d18o_data_redox$transect_dist_m))
-# filter Pi data
-inorg_hedley_data_redox <- hedley_data_redox %>%
-  filter(fraction == "Pi") %>%
-  left_join(transect_dist_key, by = "transect_dist_id")
-
-# filter Po data
-org_hedley_data_redox <- hedley_data_redox %>%
-  filter(fraction == "Po")  %>%
-  left_join(transect_dist_key, by = "transect_dist_id")
-
-# pick colors
-my_redox_colors <- c("#fc8d62", "#8da0cb")
-
-# inorganic P fractions
-pdf(here::here("figures_tables", "pi_vs_distance_by_extract_redox.pdf"), width = 10, height = 10, pointsize = 14)
-ggplot(data = inorg_hedley_data_redox) +
-  #geom_boxplot() +
-  geom_point(mapping = aes(x = factor(transect_dist_m), y = p_conc_mgperkg, color = redox_status, shape = redox_status),
-             alpha = 0.75, size = 3,
-             position = position_dodge(width = 0.75)) +
-  facet_wrap(~ extract, scales = "free") +
-  scale_color_manual(values = my_redox_colors) +
-  labs(x = "Transect Distance (m)", 
-       y = "Inorganic P Concentration (mg per kg)",
-       shape = "Redox Status", 
-       color = "Redox Status") +
-  # scale_fill_manual(values = my_colors) +
-  theme_classic() +
-  theme(axis.text = element_text(size = 14),
-        axis.title = element_text(size = 14),
-        text = element_text(size = 14),
-        panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank())
-dev.off()
-# some pools have trends but some don't
-
-# organic P fractions
-pdf(here::here("figures_tables", "po_vs_distance_by_extract_redox.pdf"), width = 10, height = 10, pointsize = 14)
-ggplot(data = org_hedley_data_redox) +
-  #geom_boxplot() +
-  geom_point(mapping = aes(x = factor(transect_dist_m), y = p_conc_mgperkg, color = redox_status, shape = redox_status),
-             alpha = 0.75, size = 3, 
-             position = position_dodge(width = 0.75)) +
-  facet_wrap(~ extract, scales = "free") +
-  scale_color_manual(values = my_redox_colors) +
-  labs(x = "Transect Distance (m)", 
-       y = "Organic P Concentration (mg per kg)",
-       shape = "Redox Status", 
-       color = "Redox Status") +
-  #scale_fill_manual(values = my_colors) +
-  theme_classic() +
-  theme(axis.text = element_text(size = 14),
-        axis.title = element_text(size = 14),
-        text = element_text(size = 14),
-        panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank())
-dev.off()
-# potential linear negative trend here?
-
-
-# one explanation for depth coudl be redox and if we specifically compare the top and bottom profile depths we see 
-# significant differences between the d18o values with distance for these two depths
-# AB and CR (permanently oxidized and perminatley reduced)
-# this might be an interesting research area in the future to consider
-
-# add paragraph to 
