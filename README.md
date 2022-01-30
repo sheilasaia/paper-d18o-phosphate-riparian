@@ -4,6 +4,8 @@ Data and code repository for the paper titled *Phosphate Oxygen Isotope Ratios i
 
 This README.md file was generated on 2022-01-30 by Sheila Saia.
 
+[![DOI](https://zenodo.org/badge/452524774.svg)](https://zenodo.org/badge/latestdoi/452524774)
+
 ## General Information
 
 **Title of Dataset**<br>
@@ -47,7 +49,7 @@ As of 2022-01-30 there are no other publications that cite or use these data.
 
 **Links to other publicly accessible locations of the data**<br>
 
-This dataset and associated R code are available at https://github.com/sheilasaia/paper-d18o-phosphate-riparian. The associated publication is available via Vadose Zone Journal (LINK_HERE).
+This dataset and associated R code are available at https://github.com/sheilasaia/paper-d18o-phosphate-riparian and Zenodo (https://zenodo.org/record/5920851#.Yfb04mBOlYs). The associated publication is available via Vadose Zone Journal (LINK_HERE).
 
 **Links/relationships to ancillary data**<br>
 
@@ -91,10 +93,10 @@ All data collection, processing, and analysis was done in R (v4.2.1) using RStud
 
 We also used the following R packages: `tidyverse` (v1.3.1), `forecats` (v0.5.1), `here` (v1.0.1), `car` (v3.0.12), `lme4` (v1.1.27.1), `sjPlot` (v2.8.10), and `effects` (v4.2.0), and `renv` (v0.15.2).
 
-*NOTE:* Users of these scripts can use the [`renv` R package](https://rstudio.github.io/renv/articles/renv.html) to activate the R packages used in this R project repository. Run the code below to activate the R environment that we used for all analysis in your RStudio session.
+*NOTE:* Users of these scripts can use the [`renv` R package](https://rstudio.github.io/renv/articles/renv.html) to activate the R packages used in this R project repository. Run the code below to activate the R environment that we used for all analysis in your RStudio session. **Make sure you are running code as an *RStudio project***. To do this, download the whole GitHub repository and double click on the "paper-d18o-phosphate-riparian.Rproj" file. This will open RStudio and anchor your RStudio session to this project. Once you have done this, follow the steps below.
 
 ```
-# Make sure you are running code as an *RStudio project*. To do this, download the whole GitHub repository and double click on the "paper-d18o-phosphate-riparian.Rproj" file. This will open RStudio and anchor your RStudio session to this project. Once you have done this, follow the steps below.
+# Steps to Setup Your RStudio Environment
 
 # 1. install the renv R package
 install.packages("renv")
