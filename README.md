@@ -39,17 +39,17 @@ Sheila Saia was supported by a [US EPA](https://www.epa.gov/) STAR Fellowship an
 
 **Licenses/restrictions placed on the data**<br>
 
-Please cite this work (see recommended citation below and in the [CITATION.md file](https://github.com/sheilasaia/paper-pao-review/blob/master/CITATION.md) in this repository) and use/distribute according to the CC-BY v4.0 license.
+Please cite this work (see recommended citation below and in the [CITATION.md file](https://github.com/sheilasaia/paper-d18o-phosphate-riparian/blob/master/CITATION.md) in this repository) and use/distribute according to the CC-BY v4.0 license.
 
-For a full view of the license visit the [LICENSE.md](https://github.com/sheilasaia/paper-pao-review/blob/master/LICENSE.md) file in this repository. For a human readable version of this license visit https://creativecommons.org/licenses/by/4.0/.
+For a full view of the license visit the [LICENSE.md](https://github.com/sheilasaia/paper-d18o-phosphate-riparian/blob/master/LICENSE.md) file in this repository. For a human readable version of this license visit https://creativecommons.org/licenses/by/4.0/.
 
 **Links to publications that cite or use the data**<br>
 
-As of 2020-12-10 there are no other publications that cite or use these data.
+As of 2022-01-30 there are no other publications that cite or use these data.
 
 **Links to other publicly accessible locations of the data**<br>
 
-This dataset and associated R code are available at https://github.com/sheilasaia/paper-pao-review. The associated publication is available via Environmental Science & Technology (https://doi.org/10.1086/691439) and the Earth ArXiv (preprint: https://eartharxiv.org/repository/view/1132/).
+This dataset and associated R code are available at https://github.com/sheilasaia/paper-d18o-phosphate-riparian. The associated publication is available via Vadose Zone Journal (LINK).
 
 **Links/relationships to ancillary data**<br>
 
@@ -57,7 +57,7 @@ There are no ancillary data associated with this paper.
 
 **Data derived from another source**<br>
 
-We downloaded all data associated with this paper on 2020-03-10 from the [Web of Science](https://www.webofknowledge.com) servers using the [`rwos` R package](https://github.com/juba/rwos). Please see the manuscript methods (Section 2) and code for a full description.
+TODO
 
 **Additional related data collected that was not included in the current data package**<br>
 
@@ -69,17 +69,19 @@ There are no other versions of the data associated with this paper.
 
 **Recommended citation for the data**<br>
 
-See [CITATION.md](https://github.com/sheilasaia/paper-pao-review/blob/master/CITATION.md) for the recommended citation for these data and code.
+See [CITATION.md](https://github.com/sheilasaia/paper-d18o-phosphate-riparian/blob/master/CITATION.md) for the recommended citation for these data and code.
 
 **Paper Availability**<br>
 
-The associated publication is available via Environmental Science & Technology (https://doi.org/10.1086/691439) and the Earth ArXiv (preprint: https://eartharxiv.org/repository/view/1132/).
+The associated publication is available via Vadose Zone Journal (LINK).
 
 ## Methodological Information ##
 
 **Description of methods used for collection/generation of data:**<br>
 
-Briefly, we used the R `rwos` package and other R packages to pull data from the Web of Science servers and generate figures included in the manuscript. We provide a detailed description of the methods used to collect and analyze these data in the associated code and publication. The publication is available via Environmental Science & Technology (https://doi.org/10.1086/691439) and the Earth ArXiv (preprint: https://eartharxiv.org/repository/view/1132/).
+Briefly, we TODO.
+
+We provide a detailed description of the methods used to collect and analyze these data in the associated code and publication. The publication is available via Vadose Zone Journal (LINK).
 
 **Methods for processing the data:**<br>
 
@@ -89,7 +91,7 @@ Besides the raw data that was obtained directly from Web of Science, we created 
 
 **Instrument- or software-specific information needed to interpret the data:**<br>
 
-All data collection, processing, and analysis was done in R (v3.6.2) using RStudio desktop (v1.3.1093) on an iMac desktop (macOS Mojave v10.14.6, 2.3 GHz Intel Core i5, 16 GB 2133 MHz DD4, Intel Iris Plus Graphics 640 1536 MB).
+All data collection, processing, and analysis was done in R (v3.6.2) using RStudio desktop (v1.3.1093) on a Macbook Air laptop (macOS Mojave v10.14.6, 2.3 GHz Intel Core i5, 16 GB 2133 MHz DD4, Intel Iris Plus Graphics 640 1536 MB).
 
 We also used the following R packages: `rwos` (v0.0.1), `tidyverse` (v1.3.0), `here` (v0.1), `beepr` (v1.3), `ggforce` (v0.3.1), `gridExtra` (v2.3), and `ggupset` (v0.3.0), and `renv` (v0.12.5).
 
